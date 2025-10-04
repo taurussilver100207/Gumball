@@ -4,6 +4,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Darwin & Gumball Page Transition</title>
+
+<!-- Bungee Font -->
+<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
 <style>
   :root { 
     --dur: 900ms;
@@ -15,7 +19,6 @@
   body {
     margin: 0;
     min-height: 100vh;
-    font-family: system-ui, sans-serif;
     background: #33c9ff;
     overflow-x: hidden;
   }
@@ -30,8 +33,6 @@
   .page.hidden {
     display: none;
   }
-
-  @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
 
   .gumball-wrapper {
     display: flex;
@@ -54,17 +55,16 @@
     transform: scale(1.05);
   }
 
+  /* 🌈 Caption Style */
   .gumball-caption,
   .loading-caption,
   .speech-bubble {
-    font-family: 'Luckiest Guy', cursive;
+    font-family: 'Bungee', cursive;
     font-size: 1.4rem;
-    color: #fff;
-    text-shadow:
-      2px 2px 0 #000,
-      -2px 2px 0 #000,
-      2px -2px 0 #000,
-      -2px -2px 0 #000;
+    color: white;
+    -webkit-text-stroke: 2px black;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   .caption-container {
@@ -82,8 +82,7 @@
     left: 50%;
     transform: translate(-50%, -20px);
     background: transparent;
-    color: #fff;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     padding: 8px 14px;
     border-radius: 20px;
     opacity: 0;
@@ -157,6 +156,7 @@
 
   .loading-caption {
     font-size: 1.5rem;
+    margin-top: 10px;
   }
 
   .loading-caption::after {
@@ -199,6 +199,11 @@
   <!-- Orange overlay -->
   <div class="orange" id="overlay"></div>
 
+  <!-- 🎵 Click sound -->
+  <audio id="clickSound" preload="auto">
+    <source src="pop.mp3" type="audio/mpeg">
+  </audio>
+
 <script>
   const page1 = document.getElementById('page1');
   const page2 = document.getElementById('page2');
@@ -207,11 +212,12 @@
   const speechBubble = document.getElementById('speechBubble');
   const caption2 = document.getElementById('caption2');
   const overlay = document.getElementById('overlay');
+  const clickSound = document.getElementById('clickSound');
 
   const gifDuration = 8000;
   const gifPath = '9.gif';
 
-  // 🔸 Orange dropdown transition to page 2
+  // 🟧 Orange dropdown transition to page 2
   function showOverlayAndSwitch(targetPage) {
     overlay.classList.add('active');
 
@@ -236,9 +242,18 @@
     }, gifDuration);
   }
 
-  goPage2.addEventListener('click', () => showOverlayAndSwitch(2));
+  // 🧠 Play sound helper
+  function playClickSound() {
+    clickSound.currentTime = 0;
+    clickSound.play();
+  }
 
-  // ✨ Sparkle generator
+  goPage2.addEventListener('click', () => {
+    playClickSound();
+    showOverlayAndSwitch(2);
+  });
+
+  // ✨ Sparkles
   function createSparkles(container, count = 10) {
     const rect = container.getBoundingClientRect();
     for (let i = 0; i < count; i++) {
@@ -248,20 +263,19 @@
       sparkle.style.top = `${Math.random() * -20}px`;
       sparkle.style.animationDelay = `${Math.random() * 0.5}s`;
       container.appendChild(sparkle);
-
       sparkle.addEventListener('animationend', () => sparkle.remove());
     }
   }
 
-  // 🌀 Gumball speech interaction (no return on third click)
+  // 🗣 Gumball speech interaction
   let clickCount = 0;
 
   gumballSpeech.addEventListener('click', () => {
+    playClickSound();
     createSparkles(gumballSpeech, 10);
     clickCount++;
 
     if (clickCount === 1) {
-      // First speech
       speechBubble.textContent = "Gud morningg";
       speechBubble.classList.add('show');
 
@@ -272,10 +286,8 @@
       }, 600);
 
     } else if (clickCount === 2) {
-      // Second speech
       speechBubble.textContent = "Chúc Cá ngày mới năng lượng nhée ✨";
-    } 
-    // no behavior for clickCount >= 3
+    }
   });
 </script>
 </body>
