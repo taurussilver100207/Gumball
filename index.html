@@ -199,11 +199,6 @@
   <!-- Orange overlay -->
   <div class="orange" id="overlay"></div>
 
-  <!-- 🎵 Click sound -->
-  <audio id="clickSound" preload="auto">
-    <source src="pop.mp3" type="audio/mpeg">
-  </audio>
-
 <script>
   const page1 = document.getElementById('page1');
   const page2 = document.getElementById('page2');
@@ -212,7 +207,6 @@
   const speechBubble = document.getElementById('speechBubble');
   const caption2 = document.getElementById('caption2');
   const overlay = document.getElementById('overlay');
-  const clickSound = document.getElementById('clickSound');
 
   const gifDuration = 8000;
   const gifPath = '9.gif';
@@ -242,10 +236,11 @@
     }, gifDuration);
   }
 
-  // 🧠 Play sound helper
+  // 🧠 Play sound with no delay by spawning new instance
   function playClickSound() {
-    clickSound.currentTime = 0;
-    clickSound.play();
+    const sound = new Audio('pop.mp3'); // same file as before
+    sound.currentTime = 0;
+    sound.play();
   }
 
   goPage2.addEventListener('click', () => {
